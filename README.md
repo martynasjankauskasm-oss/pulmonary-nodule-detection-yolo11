@@ -1,23 +1,33 @@
 # Pulmonary Nodule Detection and Classification using YOLO11n
 
-A research/educational object-detection project for detecting and classifying pulmonary nodules in CT slices using **YOLO11n (Nano)**.
+A research and educational object-detection project for detecting and classifying pulmonary nodules in CT images using **YOLO11n (Nano)**.
+
+The project includes dataset verification and analysis, model training configuration, final test-set evaluation, performance visualization, single-image inference, and a web-based demonstration application built with Gradio.
+
+> **Research prototype:** This project is intended for research, educational, and demonstration purposes only. It is **not a medical diagnostic tool** and must not be used for clinical decision-making.
+
+---
 
 ## Classes
 
-The model predicts three classes:
+The model predicts three pulmonary nodule classes:
 
-- **benign**
-- **equivocal**
-- **malignant**
+- **Benign**
+- **Equivocal**
+- **Malignant**
 
-## Project structure
+---
+
+## Project Structure
 
 ```text
-Pulmonary_Nodule_Detection_GitHub/
+pulmonary-nodule-detection-yolo11/
 ├── notebooks/
 │   └── Pulmonary_Nodule_Detection_Final.ipynb
+│
 ├── app/
 │   └── app.py
+│
 ├── results/
 │   ├── confusion_matrix.png
 │   ├── confusion_matrix_normalized.png
@@ -25,15 +35,21 @@ Pulmonary_Nodule_Detection_GitHub/
 │   ├── BoxF1_curve.png
 │   ├── BoxP_curve.png
 │   └── BoxR_curve.png
+│
 ├── examples/
 │   ├── dataset_annotations.png
 │   ├── test_predictions.png
 │   └── single_image_inference.png
+│
 ├── weights/
 │   └── README.md
+│
 ├── requirements.txt
+├── README.md
 └── .gitignore
 ```
+
+---
 
 ## Dataset
 
@@ -41,38 +57,52 @@ The project uses the prepared **LIDC-IDRI CT Lung Detection** object-detection d
 
 https://universe.roboflow.com/lidcidri-detection/lidc-idri-ct-lung-detection-2/dataset/1
 
+The dataset contains CT images with YOLO-format object-detection annotations.
+
 The dataset is not included in this repository because it contains thousands of CT images.
 
-The prepared dataset is expected to have the following structure:
+### Dataset structure
 
 ```text
 LIDC-IDRI-CT-Lung-Detection-2-1/
 ├── train/
 │   ├── images/
 │   └── labels/
+│
 ├── valid/
 │   ├── images/
 │   └── labels/
+│
 ├── test/
 │   ├── images/
 │   └── labels/
+│
 └── data.yaml
 ```
 
-The dataset split contains:
+### Dataset split
 
-- Train: **16,354 images**
-- Validation: **2,672 images**
-- Test: **1,337 images**
+| Split | Images |
+|---|---:|
+| Train | **16,354** |
+| Validation | **2,672** |
+| Test | **1,337** |
+| **Total** | **20,363** |
+
+---
 
 ## Model
 
-- Architecture: **YOLO11n (Nano)**
-- Task: Object detection
-- Classes: 3
-- Training epochs: **50**
-- Image size: **640 × 640**
-- Batch size: **16**
+The project uses **YOLO11n (Nano)** for pulmonary nodule object detection and classification.
+
+| Parameter | Value |
+|---|---|
+| Architecture | **YOLO11n (Nano)** |
+| Task | Object detection |
+| Number of classes | **3** |
+| Training epochs | **50** |
+| Image size | **640 × 640** |
+| Batch size | **16** |
 
 The notebook contains the training configuration, but training is disabled by default:
 
@@ -82,11 +112,13 @@ RUN_TRAINING = False
 
 This prevents an accidental 50-epoch training run when the notebook is opened.
 
-## Trained weights
+---
+
+## Trained Weights
 
 The trained `best.pt` checkpoint is intentionally **not committed to this repository** because model weights are large.
 
-Place the checkpoint here for the standalone application:
+For the standalone application, place the trained checkpoint at:
 
 ```text
 weights/best.pt
@@ -94,9 +126,13 @@ weights/best.pt
 
 Alternatively, set the `MODEL_PATH` environment variable to another location.
 
+---
+
 ## Evaluation
 
-The final test-set evaluation produced approximately:
+The final evaluation was performed on the provided test split.
+
+### Overall performance
 
 | Metric | Result |
 |---|---:|
@@ -105,37 +141,114 @@ The final test-set evaluation produced approximately:
 | mAP@50 | **81.85%** |
 | mAP@50–95 | **51.59%** |
 
-Per-class mAP@50–95:
+### Per-class performance
 
 | Class | mAP@50–95 |
 |---|---:|
-| Benign | 38.57% |
-| Equivocal | 44.89% |
-| Malignant | 71.31% |
+| Benign | **38.57%** |
+| Equivocal | **44.89%** |
+| Malignant | **71.31%** |
 
-The repository includes the generated evaluation plots in `results/`.
+The repository includes the generated evaluation plots in the `results/` directory.
 
-## Running the notebook
+---
+
+## Evaluation Visualizations
+
+The project includes:
+
+- Confusion matrix
+- Normalized confusion matrix
+- Precision-Recall curve
+- Precision-Confidence curve
+- Recall-Confidence curve
+- F1-Confidence curve
+
+These visualizations are available in:
+
+```text
+results/
+```
+
+---
+
+## Example Predictions
+
+Representative dataset annotations and model predictions are included in:
+
+```text
+examples/
+```
+
+These examples demonstrate the model's bounding-box detection and classification results.
+
+---
+
+## Web Application
+
+A Gradio-based web application was developed to demonstrate the trained model interactively.
+
+The application allows users to:
+
+1. Upload a CT image.
+2. Select a confidence threshold.
+3. Run YOLO11n inference.
+4. View detected nodules using bounding boxes.
+5. View the predicted class and confidence score.
+
+### Application preview
+
+![Pulmonary Nodule AI](examples/single_image_inference.png)
+
+The application code is available in:
+
+```text
+app/app.py
+```
+
+---
+
+## Confidence Threshold
+
+The confidence threshold is the minimum confidence required for a detection to be displayed.
+
+For example, with a threshold of `0.50`, detections with confidence below 50% are filtered out.
+
+A higher threshold generally produces fewer, more confident detections, while a lower threshold allows more detections but may include weaker predictions.
+
+---
+
+## Running the Notebook
 
 The notebook was developed for Google Colab.
 
 1. Open `notebooks/Pulmonary_Nodule_Detection_Final.ipynb` in Google Colab.
 2. Mount Google Drive.
 3. Place the prepared dataset at the configured dataset path.
-4. Place the trained checkpoint at the configured model path.
+4. Place the trained `best.pt` checkpoint at the configured model path.
 5. Run the notebook cells in order.
 
-For a different environment, set:
+The notebook contains the complete workflow:
 
 ```text
-DATASET_PATH
-PROJECT_ROOT
-MODEL_PATH
+Dataset
+   ↓
+Dataset analysis
+   ↓
+YOLO11n configuration
+   ↓
+Training configuration
+   ↓
+Test-set evaluation
+   ↓
+Performance visualization
+   ↓
+Inference
 ```
 
-as environment variables.
+---
 
-## Running the web application
+## Running the Web Application
 
 From the repository root:
 
@@ -156,33 +269,41 @@ To use another checkpoint:
 MODEL_PATH=/path/to/best.pt python app/app.py
 ```
 
-For a public Gradio share link, set:
+To generate a public Gradio share link:
 
 ```bash
 GRADIO_SHARE=true MODEL_PATH=/path/to/best.pt python app/app.py
 ```
 
-The application allows the user to:
+---
 
-1. Upload a CT image.
-2. Select a confidence threshold.
-3. Run YOLO11n inference.
-4. View detected bounding boxes.
-5. View the predicted class and confidence.
+## Dataset Split
 
-## Confidence threshold
+The project uses the prepared train, validation, and test splits provided with the Roboflow dataset.
 
-The confidence threshold is the minimum confidence required for a detection to be displayed.
+The reported evaluation metrics therefore describe performance on the provided test split.
 
-For example, with a threshold of `0.50`, detections below 50% confidence are filtered out.
+---
 
-A higher threshold generally produces fewer, more confident detections; a lower threshold allows more detections but may also include weaker predictions.
+## Limitations
 
-## Dataset split
+This project is a **research and educational prototype**.
 
-The project uses the prepared train, validation, and test splits provided with the Roboflow dataset. The reported evaluation metrics therefore describe performance on the provided test split.
+The model was developed for experimentation and demonstration of pulmonary nodule object detection and classification. The results should not be interpreted as clinical diagnostic performance.
 
-## Important limitation
+The application is **not a medical diagnostic tool** and must not be used for clinical decision-making.
 
-This is a **research/educational prototype**. It is not a medical diagnostic tool and must not be used for clinical decision-making.
+---
 
+## Technologies
+
+- Python
+- YOLO11n
+- Ultralytics
+- PyTorch
+- NumPy
+- OpenCV
+- Pillow
+- Matplotlib
+- Gradio
+- Google Colab
