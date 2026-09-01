@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local data
+data/
+datasets/
+LIDC-IDRI-CT-Lung-Detection-2-1/
+
+# Model weights and training runs
+*.pt
+*.pth
+weights/*.pt
+runs/
+yolo11n_final/
+yolo11n_final_test/
+
+# Colab / local environment
+/content/
+.env
+.DS_Store
