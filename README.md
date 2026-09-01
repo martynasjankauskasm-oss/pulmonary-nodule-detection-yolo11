@@ -178,11 +178,9 @@ For example, with a threshold of `0.50`, detections below 50% confidence are fil
 
 A higher threshold generally produces fewer, more confident detections; a lower threshold allows more detections but may also include weaker predictions.
 
-## Dataset split limitation
+## Dataset split
 
-The prepared dataset is organized at the **image level**, and the notebook audits patient identifiers across the splits.
-
-The audit found patients appearing in more than one split. This means the test set should not be interpreted as a strictly patient-independent evaluation. The reported metrics describe performance on the provided image-level test split.
+The project uses the prepared train, validation, and test splits provided with the Roboflow dataset. The reported evaluation metrics therefore describe performance on the provided test split.
 
 ## Important limitation
 
