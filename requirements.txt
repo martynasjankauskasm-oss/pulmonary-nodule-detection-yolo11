@@ -1,0 +1,7 @@
+ultralytics==8.4.137
+gradio
+PyYAML
+opencv-python
+matplotlib
+numpy
+Pillow
